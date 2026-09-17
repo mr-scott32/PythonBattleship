@@ -103,11 +103,9 @@ def setup_cpu():
 
     return grid
 
-def attack_grid():
-    battle_grid = create_board()
-    cpu_grid = setup_cpu()
+def attack_grid(battle_grid, cpu_grid):
     turn = True
-    while turn == True:
+    while turn:
         for i in range(10):
             for j in range(10):
                 print(battle_grid[i][j], end =' ')
@@ -119,15 +117,41 @@ def attack_grid():
             if cpu_grid[x_pos][y_pos] == 'S' and battle_grid[x_pos][y_pos] != 'X' and battle_grid[x_pos][y_pos] != 'O':
                 print('Hit!')
                 battle_grid[x_pos][y_pos] = 'X'
-            else:
+                turn = False
+            elif battle_grid[x_pos][y_pos] != 'X' and battle_grid[x_pos][y_pos] != 'O':
                 print('Miss!')
                 battle_grid[x_pos][y_pos] = 'O'
+                turn = False
+            else:
+                print('Not even on the board ay chap?')
         except:
             print('Please land it on the board at least')
     return battle_grid
 
+def check_win(battle_grid):
+    count = 0
+    for row in battle_grid:
+        for item in row:
+            if item == 'X':
+                count += 1
+
+    if count == 17:
+        return True
+    else:
+        return False
+
     
 
-#setup_player()
-setup_cpu()
-attack_grid()
+def main():
+    cpu_grid = setup_cpu()
+    battle_grid = create_board()
+    game_running = True
+    while game_running:
+        attack_grid(battle_grid, cpu_grid)
+        win = check_win(battle_grid)
+        if win == True:
+            print('Win!')
+            break
+        
+
+main()
